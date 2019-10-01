@@ -1,5 +1,5 @@
 class CommandLineInterface
-    attr_accessor :player, :boss1, :boss2, :boss3
+    attr_accessor :player, :boss1, :boss2, :boss3, :currentboss
     def new_game
         # returns user input
         puts "Pokemon Sumo"
@@ -16,7 +16,8 @@ class CommandLineInterface
            puts "We already have a user by that name, please choose a different name"
            username = user_text_input
         end
-        @player = User.create(name: username, level: 1)
+
+        @player = User.create(name: username, level:1)
 
     end
 
@@ -45,6 +46,7 @@ class CommandLineInterface
         if command == "quit" || command == "exit"
             quit
         end
+        
         command.to_i
     end
  
@@ -108,23 +110,55 @@ class CommandLineInterface
             puts "A #{weight_category(pokemon)} #{pokemon.name} that weighs #{pokemon.weight} pounds"
         end
     end
+    def update_boss
+        bossname = "boss#{player.level}"
+        self.currentboss = self.send(bossname)
+    end
 
+    def next_boss 
+        update_boss
+        
+        puts "Your next challenge is #{self.currentboss.name}."
+        result = player_battle(self.player, self.currentboss)
+        puts "after the dust clears, the final pokemon belongs to #{result.name}"
+        if result == player
+            beat_a_boss
+        else
+            lost_to_boss
+        end
+
+    
+    end
+    def lost_to_boss
+    end
+    def beat_a_boss
+        puts "Congratulations on beating #{self.currentboss.name}"
+        player.level+=1
+        update_boss
+        puts "Your next challenge is taking on #{self.currentboss.name}"
+    end
     def run
         bosses
         input = new_game
         if input == 1
             new_user
             d = select_difficulty
-            p = first_pokemon(d)
-            pokemon_ownership(p)
+            pokemon = first_pokemon(d)
+            pokemon_ownership(pokemon)
             puts "Congratulations, #{self.player.name}, you've got a new #{p.name} that weighs #{p.weight} pounds."
         elsif input == 2
             returning_user
         end
         input = main_menu
+        
         case input
+        when 1
+            next_boss
+        when 2
         when 3
             view_pokemon
+        when 4
+
         end
     end
 
