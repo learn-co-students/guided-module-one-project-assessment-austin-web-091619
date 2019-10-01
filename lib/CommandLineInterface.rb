@@ -11,6 +11,10 @@ class CommandLineInterface
     def new_user
         puts "What's your name, trainer?"
         username = user_text_input
+        while User.find_by(name: username)
+           puts "We already have a user by that name, please choose a different name"
+           username = user_text_input
+        end
         @player = User.create(name: username)
     end
 
@@ -99,11 +103,12 @@ class CommandLineInterface
         pokemons = self.player.pokemons
         puts "You own the following pokemon:"
         pokemons.each do |pokemon|
-            puts "A #{weight_category(pokemon)} #{pokemon.name} that weighs #{pokemon.weight}"
+            puts "A #{weight_category(pokemon)} #{pokemon.name} that weighs #{pokemon.weight} pounds"
         end
     end
 
     def run
+        bosses
         input = new_game
         if input == 1
             new_user
@@ -137,6 +142,7 @@ class CommandLineInterface
         else 
             @boss3 = User.find_by(name: "Giovanni", boss: "T")
         end
+        bosses_pokemon
     end
 
     def bosses_pokemon
@@ -149,8 +155,7 @@ class CommandLineInterface
         if !UserPokemon.find_by(user_id: self.boss1.id, pokemon_id: arbok.id) 
             UserPokemon.create(user_id: self.boss1.id, pokemon_id: arbok.id)
         end
-        if 
-            !UserPokemon.find_by(user_id: self.boss1.id, pokemon_id: muk.id) 
+        if !UserPokemon.find_by(user_id: self.boss1.id, pokemon_id: muk.id) 
              UserPokemon.create(user_id: self.boss1.id, pokemon_id: muk.id)
         end
 
