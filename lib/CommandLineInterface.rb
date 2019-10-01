@@ -1,5 +1,5 @@
 class CommandLineInterface
-    attr_accessor :player
+    attr_accessor :player, :boss1, :boss2, :boss3
     def new_game
         # returns user input
         puts "Pokemon Sumo"
@@ -58,5 +58,40 @@ class CommandLineInterface
         else 
             bad_input
         end
+    end
+
+    def  bosses
+        if !User.find_by(name: "Jesse", boss: "T")
+           @boss1 = User.create(name: "Jesse", boss: "T")
+        else
+            @boss1 = User.find_by(name: "Jesse", boss: "T")
+        end
+        if !User.find_by(name: "James", boss: "T")
+            @boss2 = User.create(name: "James", boss: "T")
+        else
+            @boss2 = User.find_by(name: "James", boss: "T")
+        end
+        if !User.find_by(name: "Giovanni", boss: "T")
+            @boss3 = User.create(name: "Giovanni", boss: "T")
+        else 
+            @boss3 = User.find_by(name: "Giovanni", boss: "T")
+        end
+    end
+
+    def bosses_pokemon
+        meowth = Pokemon.create(name: "Meowth", weight: 30)
+        arbok = Pokemon.create(name: "Arbok", weight: 40)
+        muk = Pokemon.create(name: "Muk", weight: 50)
+        if !UserPokemon.find_by(user_id: self.boss1.id, pokemon_id: meowth.id) 
+            UserPokemon.create(user_id: self.boss1.id, pokemon_id: meowth.id)
+        end
+        if !UserPokemon.find_by(user_id: self.boss1.id, pokemon_id: arbok.id) 
+            UserPokemon.create(user_id: self.boss1.id, pokemon_id: arbok.id)
+        end
+        if 
+            !UserPokemon.find_by(user_id: self.boss1.id, pokemon_id: muk.id) 
+             UserPokemon.create(user_id: self.boss1.id, pokemon_id: muk.id)
+        end
+
     end
 end
