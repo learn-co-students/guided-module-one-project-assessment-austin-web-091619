@@ -10,7 +10,7 @@ class CommandLineInterface
     end
     def new_user
         puts "What's your name, trainer?"
-        username = gets.chomp
+        username = user_text_input
         @player = User.create(name: username)
     end
 
@@ -18,17 +18,22 @@ class CommandLineInterface
         puts "Invalid input"
     end
     def quit
-
+        # should exit the program
+    end
+    def user_text_input
+        # a method to get text from the user
+        # used for name
+        gets.chomp
     end
     def user_input(valid_array)
-        command = ""
         valid_array <<"quit"
         valid_array <<"exit"
         available = "Your options are: "
         valid_array.each {|str| available += str + " - "}
+        command = gets.chomp
         while !valid_array.include?(command)
-            command = gets.chomp
             puts available
+            command = gets.chomp
         end
         if command == "quit" || command == "exit"
             quit
@@ -44,6 +49,13 @@ class CommandLineInterface
     end
     def returning_user
         # will have to set @user so that the program knows the current user
+        puts "Welcome back! What was your user name?"
+        username = user_text_input
+        while !User.find_by(name: username)
+            puts "User name not found, enter another user name"
+            username = user_text_input
+        end
+        @player = User.find_by(name: username)
     end
 
     def first_pokemon(difficulty)
@@ -59,7 +71,8 @@ class CommandLineInterface
     def pokemon_ownership(pokemon)
         UserPokemon.create(user_id: self.player.id, pokemon_id: pokemon.id)
     end
-
+    def main_menu
+    end
     def run
         input = new_game
         if input == "1"
@@ -71,5 +84,6 @@ class CommandLineInterface
         elsif input == "2"
             returning_user
         end
+        main_menu
     end
 end
