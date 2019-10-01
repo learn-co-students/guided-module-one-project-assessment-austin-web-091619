@@ -19,7 +19,7 @@ class CommandLineInterface
     end
     def quit
         # should exit the program
-        break
+        
     end
     def user_text_input
         # a method to get text from the user
@@ -39,14 +39,14 @@ class CommandLineInterface
         if command == "quit" || command == "exit"
             quit
         end
-        command
+        command.to_i
     end
  
     def select_difficulty
         puts "Select your difficulty level #{self.player.name}"
         puts "Enter 1 for easy, 2 for moderate, or 3 for difficult:"
         valid_array = ["1","2","3"]
-        user_input(valid_array).to_i
+        user_input(valid_array)
     end
     def returning_user
         # will have to set @user so that the program knows the current user
@@ -82,18 +82,42 @@ class CommandLineInterface
         valid_array=["1", "2","3","4"]
         user_input(valid_array)
     end
-    
+    def weight_category(pokemon)
+        if pokemon.weight < 10
+            return "tiny"
+        elsif  pokemon.weight <20
+            return "small"
+        elsif pokemon.weight <30
+            return "normal"
+        elsif pokemon.weight <40
+            return "large"
+        elsif pokemon.weight <50
+            return "huge"
+        end
+    end
+    def view_pokemon
+        pokemons = self.player.pokemons
+        puts "You own the following pokemon:"
+        pokemons.each do |pokemon|
+            puts "A #{weight_category(pokemon)} #{pokemon.name} that weighs #{pokemon.weight}"
+        end
+    end
+
     def run
         input = new_game
-        if input == "1"
+        if input == 1
             new_user
             d = select_difficulty
             p = first_pokemon(d)
             pokemon_ownership(p)
             puts "Congratulations, #{self.player.name}, you've got a new #{p.name} that weighs #{p.weight} pounds."
-        elsif input == "2"
+        elsif input == 2
             returning_user
         end
-        main_menu
+        input = main_menu
+        case input
+        when 3
+            view_pokemon
+        end
     end
 end

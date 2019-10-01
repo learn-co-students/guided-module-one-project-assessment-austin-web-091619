@@ -1,4 +1,4 @@
 class User<ActiveRecord::Base
-    has_many :userpokemons
-    has_many :pokemons, through: :userpokemons
+    has_many :user_pokemons
+    has_many :pokemons, through: :user_pokemons
 end
