@@ -1,46 +1,30 @@
 require_relative '../config/environment'
 require_relative '../apps/models/user'
 
-NEW_GAME = 1
-CONTINUE_GAME = 2
-SHOW_STATS = 3
-GAME_OVER = false
+# NEW_GAME = 1
+# CONTINUE_GAME = 2
+# SHOW_STATS = 3
+# GAME_OVER = false
 
-while (GAME_OVER)
+# while (GAME_OVER)
 
-    gameIntro
+#     gameIntro
     
-    choice = gets.chomp
+#     choice = gets.chomp
 
-    if choice = NEW_GAME
-        GAME_OVER = play_new_game
-    elsif choice = CONTINUE_GAME
-        GAME_OVER = continue_game
-    elsif choice = SHOW_STATS
-        GAME_OVER = show_stats
-    else
-        "Wrong"
-    end
+#     if choice = NEW_GAME
+#         GAME_OVER = play_new_game
+#     elsif choice = CONTINUE_GAME
+#         GAME_OVER = continue_game
+#     elsif choice = SHOW_STATS
+#         GAME_OVER = show_stats
+#     else
+#         "Wrong"
+#     end
 
-    save
+#     save
 
-end
-
-def play_new_game
-
-end
-
-def continue_game
-
-end
-
-def show_stats
-
-end
-
-
-
-
+# end
 
 
 
