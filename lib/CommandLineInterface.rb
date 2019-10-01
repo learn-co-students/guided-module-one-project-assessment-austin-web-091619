@@ -19,6 +19,7 @@ class CommandLineInterface
     end
     def quit
         # should exit the program
+        break
     end
     def user_text_input
         # a method to get text from the user
@@ -72,7 +73,16 @@ class CommandLineInterface
         UserPokemon.create(user_id: self.player.id, pokemon_id: pokemon.id)
     end
     def main_menu
+        puts "Welcome #{self.player.name}"
+        puts "You can:"
+        puts "1 -- Battle the next boss"
+        puts "2 -- Train against a pokemon"
+        puts "3 -- View your pokemon"
+        puts "4 -- Restart your game"
+        valid_array=["1", "2","3","4"]
+        user_input(valid_array)
     end
+    
     def run
         input = new_game
         if input == "1"
