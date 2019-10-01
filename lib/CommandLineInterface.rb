@@ -5,7 +5,8 @@ class CommandLineInterface
         puts "Pokemon Sumo"
         puts "Welcome to the amazing world of Pokemon competing by weight"
         puts "Enter 1 for a New Game or 2 to continue:"
-        gets.chomp
+        valid_array = ["1", "2"]
+        user_input(valid_array)
     end
     def new_user
         puts "What's your name, trainer?"
@@ -16,12 +17,30 @@ class CommandLineInterface
     def bad_input
         puts "Invalid input"
     end
+    def quit
 
+    end
+    def user_input(valid_array)
+        command = ""
+        valid_array <<"quit"
+        valid_array <<"exit"
+        available = "Your options are: "
+        valid_array.each {|str| available += str + " - "}
+        while !valid_array.include?(command)
+            command = gets.chomp
+            puts available
+        end
+        if command == "quit" || command == "exit"
+            quit
+        end
+        command
+    end
  
     def select_difficulty
         puts "Select your difficulty level #{self.player.name}"
         puts "Enter 1 for easy, 2 for moderate, or 3 for difficult:"
-        gets.chomp
+        valid_array = ["1","2","3"]
+        user_input(valid_array).to_i
     end
     def returning_user
         # will have to set @user so that the program knows the current user
@@ -45,18 +64,12 @@ class CommandLineInterface
         input = new_game
         if input == "1"
             new_user
-            d = select_difficulty.to_i
-            if d>=1 && d<=3 
-                p = first_pokemon(d)
-                pokemon_ownership(p)
-                puts "Congratulations, #{self.player.name}, you've got a new #{p.name} that weighs #{p.weight} pounds."
-            else
-                bad_input
-            end
+            d = select_difficulty
+            p = first_pokemon(d)
+            pokemon_ownership(p)
+            puts "Congratulations, #{self.player.name}, you've got a new #{p.name} that weighs #{p.weight} pounds."
         elsif input == "2"
             returning_user
-        else 
-            bad_input
         end
     end
 end
