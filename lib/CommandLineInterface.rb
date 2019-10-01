@@ -11,11 +11,13 @@ class CommandLineInterface
     def new_user
         puts "What's your name, trainer?"
         username = user_text_input
+
         while User.find_by(name: username)
            puts "We already have a user by that name, please choose a different name"
            username = user_text_input
         end
-        @player = User.create(name: username)
+        @player = User.create(name: username, level: 1)
+
     end
 
     def bad_input
@@ -152,12 +154,27 @@ class CommandLineInterface
         if !UserPokemon.find_by(user_id: self.boss1.id, pokemon_id: meowth.id) 
             UserPokemon.create(user_id: self.boss1.id, pokemon_id: meowth.id)
         end
-        if !UserPokemon.find_by(user_id: self.boss1.id, pokemon_id: arbok.id) 
-            UserPokemon.create(user_id: self.boss1.id, pokemon_id: arbok.id)
-        end
-        if !UserPokemon.find_by(user_id: self.boss1.id, pokemon_id: muk.id) 
-             UserPokemon.create(user_id: self.boss1.id, pokemon_id: muk.id)
+        if !UserPokemon.find_by(user_id: self.boss2.id, pokemon_id: arbok.id) 
+            UserPokemon.create(user_id: self.boss2.id, pokemon_id: arbok.id)
         end
 
+        if !UserPokemon.find_by(user_id: self.boss3.id, pokemon_id: muk.id) 
+             UserPokemon.create(user_id: self.boss3.id, pokemon_id: muk.id)
+        end
+
+    end
+
+    def player_battle(user1, user2)
+        a = user1.pokemons
+        b = user2.pokemons
+        wa = a.map{|p| p.weight} 
+        wb = b.map{|p| p.weight}
+        total_a = wa.sum 
+        total_b = wb.sum
+        if total_a > total_b
+            return user1
+        else 
+            return user2
+        end 
     end
 end
