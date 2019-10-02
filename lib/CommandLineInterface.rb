@@ -110,7 +110,9 @@ class CommandLineInterface
         pokemons.each do |pokemon|
             puts "A #{weight_category(pokemon)} #{pokemon.name} that weighs #{pokemon.weight} pounds"
         end
+        binding.pry
     end
+    
     def update_boss
         bossname = "boss#{player.level}"
         self.currentboss = self.send(bossname)
@@ -203,9 +205,9 @@ class CommandLineInterface
     end
 
     def bosses_pokemon
-        meowth = Pokemon.create(name: "Meowth", weight: 30)
-        arbok = Pokemon.create(name: "Arbok", weight: 40)
-        muk = Pokemon.create(name: "Muk", weight: 50)
+        meowth = Pokemon.find_or_create_by(name: "Meowth", weight: 30)
+        arbok =Pokemon.find_or_create_by(name: "Arbok", weight: 40)
+        muk = Pokemon.find_or_create_by(name: "Muk", weight: 50)
         if !UserPokemon.find_by(user_id: self.boss1.id, pokemon_id: meowth.id) 
             UserPokemon.create(user_id: self.boss1.id, pokemon_id: meowth.id)
         end
@@ -235,7 +237,15 @@ class CommandLineInterface
     def delete_user
         UserPokemon.where(user_id: self.player.id).destroy_all
         player.destroy
+    end
 
+    def trainer_battle(pokemon)
+        a = @player
+        b = pokemon.pokemons 
+        player_w = a.map{|p| p.weight}
+        opponent_w = a.map{|p| p.weight}
+        total_player_weight = pw.sum
+        total_
     end
 
 end
