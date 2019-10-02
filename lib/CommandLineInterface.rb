@@ -87,7 +87,8 @@ class CommandLineInterface
         puts "2 -- Train against a pokemon"
         puts "3 -- View your pokemon"
         puts "4 -- Restart your game"
-        valid_array=["1", "2","3","4"]
+        puts "5 -- Close the game"
+        valid_array=["1", "2","3","4","5"]
         user_input(valid_array)
     end
     def weight_category(pokemon)
@@ -130,6 +131,8 @@ class CommandLineInterface
     
     end
     def lost_to_boss
+        puts "Sorry #{self.player.name} , #{self.currentboss} got you."
+        puts "Train a little bit and then try again"
     end
     def beat_a_boss
         puts "Congratulations on beating #{self.currentboss.name}"
@@ -150,15 +153,27 @@ class CommandLineInterface
             returning_user
         end
         input = main_menu
-        
-        case input
-        when 1
-            next_boss
-        when 2
-        when 3
-            view_pokemon
-        when 4
-
+        while input != 5
+            case input
+            when 1
+                next_boss
+            when 2
+                # training_battle
+                
+            when 3
+                view_pokemon
+            when 4
+                # delete user
+                # call new_user
+                delete_user
+                new_user
+                d = select_difficulty
+                pokemon = first_pokemon(d)
+                pokemon_ownership(pokemon)
+            when 5
+                break
+            end
+            input = main_menu
         end
     end
 
@@ -211,4 +226,10 @@ class CommandLineInterface
             return user2
         end 
     end
+    def delete_user
+        UserPokemon.where(user_id: self.player.id).destroy_all
+        player.destroy
+
+    end
+
 end
