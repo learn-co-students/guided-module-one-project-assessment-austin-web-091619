@@ -161,9 +161,9 @@ class CommandLineInterface
                 next_boss
             when 2
                 # training_battle
-                # training_pokemon
+                # t = training_pokemon
                 # if trainer wins 
-                # run pokemon_ownership()
+                # run pokemon_ownership(t)
             when 3
                 view_pokemon
             when 4
