@@ -205,9 +205,9 @@ class CommandLineInterface
     end
 
     def bosses_pokemon
-        meowth = Pokemon.create(name: "Meowth", weight: 30)
-        arbok = Pokemon.create(name: "Arbok", weight: 40)
-        muk = Pokemon.create(name: "Muk", weight: 50)
+        meowth = Pokemon.find_or_create_by(name: "Meowth", weight: 30)
+        arbok =Pokemon.find_or_create_by(name: "Arbok", weight: 40)
+        muk = Pokemon.find_or_create_by(name: "Muk", weight: 50)
         if !UserPokemon.find_by(user_id: self.boss1.id, pokemon_id: meowth.id) 
             UserPokemon.create(user_id: self.boss1.id, pokemon_id: meowth.id)
         end
