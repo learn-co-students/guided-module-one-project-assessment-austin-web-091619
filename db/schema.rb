@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 4) do
+ActiveRecord::Schema.define(version: 5) do
 
   create_table "pokemons", force: :cascade do |t|
     t.string "name"
     t.string "description"
-    t.string "type"
+    t.string "pokemontype"
     t.integer "weight"
   end
 

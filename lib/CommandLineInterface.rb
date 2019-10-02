@@ -1,6 +1,6 @@
 
 class CommandLineInterface
-    attr_accessor :player, :boss1, :boss2, :boss3, :currentboss
+    attr_accessor :player, :boss1, :boss2, :boss3, :currentboss, :boss4
     def new_game
         # returns user input
         puts "Pokemon Sumo"
@@ -35,9 +35,10 @@ class CommandLineInterface
         # used for name
         gets.chomp
     end
+
     def user_input(valid_array)
-        valid_array <<"quit"
-        valid_array <<"exit"
+        # valid_array <<"quit"
+        # valid_array <<"exit"
         available = "Your options are: "
         valid_array.each {|str| available += str + " - "}
         command = gets.chomp
@@ -58,6 +59,7 @@ class CommandLineInterface
         valid_array = ["1","2","3"]
         user_input(valid_array)
     end
+
     def returning_user
         # will have to set @user so that the program knows the current user
         puts "Welcome back! What was your user name?"
@@ -70,7 +72,8 @@ class CommandLineInterface
     end
 
     def first_pokemon(difficulty)
-        random_pokemon
+        
+        
         if difficulty == 1
             Pokemon.create(name: Faker::Games::Pokemon.name, weight: Faker::Number.between(from:30, to:40) )
         elsif difficulty == 2
@@ -81,8 +84,9 @@ class CommandLineInterface
     end
 
     def pokemon_ownership(pokemon)
-        UserPokemon.create(user_id: self.player.id, pokemon_id: pokemon.id)
+        UserPokemon.create(user_id: self.player.id, pokemon_id: pokemon.id, level: 1)
     end
+
     def main_menu
         puts "Welcome #{self.player.name}"
         puts "You can:"
@@ -95,25 +99,31 @@ class CommandLineInterface
         user_input(valid_array)
     end
     def weight_category(pokemon)
-        if pokemon.weight < 10
+        if pokemon.weight < 100
             return "tiny"
-        elsif  pokemon.weight <20
+        elsif  pokemon.weight <300
             return "small"
-        elsif pokemon.weight <30
+        elsif pokemon.weight <600
             return "normal"
-        elsif pokemon.weight <40
+        elsif pokemon.weight <1000
             return "large"
-        elsif pokemon.weight <50
+        else 
             return "huge"
         end
     end
+
     def view_pokemon
         pokemons = self.player.pokemons
         puts "You own the following pokemon:"
         pokemons.each do |pokemon|
-            puts "A #{weight_category(pokemon)} #{pokemon.name} that weighs #{pokemon.weight} pounds"
-        end
+            w = pokemon.weight * find_userpokemon(self.player, pokemon).level
+            puts "A #{weight_category(pokemon)} #{pokemon.name} that weighs #{w} pounds"
 
+        end
+       
+    end
+    def find_userpokemon(user, pokemon)
+        UserPokemon.find_by(user_id: user.id, pokemon_id: pokemon.id)
     end
     
     def update_boss
@@ -124,7 +134,12 @@ class CommandLineInterface
 
     def next_boss 
         update_boss
-        
+        if self.currentboss == self.boss4
+            puts "You beat 'em all!!!"
+            puts "Congratulations #{self.player.name} you've got the heaviest pokemon team ever!"
+            puts "Maybe you should start your challenge again."
+            return
+        end
         puts "Your next challenge is #{self.currentboss.name}."
         result = player_battle(self.player, self.currentboss)
         puts "after the dust clears, the final pokemon belongs to #{result.name}"
@@ -143,6 +158,7 @@ class CommandLineInterface
     def beat_a_boss
         puts "Congratulations on beating #{self.currentboss.name}"
         player.level+=1
+        player.save
         update_boss
         puts "Your next challenge is taking on #{self.currentboss.name}"
     end
@@ -151,8 +167,9 @@ class CommandLineInterface
         input = new_game
         if input == 1
             new_user
-            d = select_difficulty
-            pokemon = first_pokemon(d)
+            # d = select_difficulty
+            # pokemon = first_pokemon(d)
+            pokemon = random_pokemon
             pokemon_ownership(pokemon)
             puts "Congratulations, #{self.player.name}, you've got a new #{pokemon.name} that weighs #{pokemon.weight} pounds."
         elsif input == 2
@@ -164,10 +181,16 @@ class CommandLineInterface
             when 1
                 next_boss
             when 2
-                # training_battle
-                # training_pokemon
-                # if trainer wins 
-                # run pokemon_ownership()
+                rando = random_pokemon
+                results = trainer_battle(rando)
+                if results == "loss"
+                    puts "You got beat by a #{rando.name}"
+                    puts "Hopefully you'll have better luck next time."
+                else
+                    # if we win, trainingbattle returns the pokemon the player beat
+                    leveling_up(results)
+                end
+                
             when 3
                 view_pokemon
             when 4
@@ -175,8 +198,9 @@ class CommandLineInterface
                 # call new_user
                 delete_user
                 new_user
-                d = select_difficulty
-                pokemon = first_pokemon(d)
+                # d = select_difficulty
+                # pokemon = first_pokemon(d)
+                pokemon = random_pokemon
                 pokemon_ownership(pokemon)
             when 5
                 break
@@ -186,12 +210,21 @@ class CommandLineInterface
     end
     def leveling_up(pokemon)
         x = rand(1..4)
+      
         if x == 1
-            self.player.pokemons << pokemon
+            UserPokemon.create(user_id: self.player.id, pokemon_id: pokemon.id, level: 1)
+            puts "A #{pokemon.name} joined your team!!!!!!!!"
         elsif x ==2 || x==3
-            self.player.userpokemons.sample.level += 1
+            p=self.player.pokemons.sample
+            u_p = find_userpokemon(self.player, p)
+            u_p.level += 1
+            u_p.save
+            puts "One of your pokemon got slightly heavier."
         else
-            self.player.userpokemons.sample.level += 2
+            u_p = self.player.user_pokemons.sample
+            u_p.level += 2
+            u_p.save
+            puts "One of your pokemon really put on some pounds"
         end
     end
     def training_pokemon
@@ -203,6 +236,9 @@ class CommandLineInterface
         
         poke = Pokemon.find_or_create_by(name: p.species.name)
         poke.weight=p.weight
+        poke.pokemontype=p.types[0].type.name
+        poke.save
+        poke
     end
     def  bosses
         if !User.find_by(name: "Jesse", boss: "T")
@@ -220,13 +256,14 @@ class CommandLineInterface
         else 
             @boss3 = User.find_by(name: "Giovanni", boss: "T")
         end
+        @boss4 = "Complete"
         bosses_pokemon
     end
 
     def bosses_pokemon
-        meowth = Pokemon.find_or_create_by(name: "Meowth", weight: 30)
-        arbok =Pokemon.find_or_create_by(name: "Arbok", weight: 40)
-        muk = Pokemon.find_or_create_by(name: "Muk", weight: 50)
+        meowth = Pokemon.find_or_create_by(name: "Meowth", weight: 500)
+        arbok =Pokemon.find_or_create_by(name: "Arbok", weight: 2000)
+        muk = Pokemon.find_or_create_by(name: "Muk", weight: 5000)
         if !UserPokemon.find_by(user_id: self.boss1.id, pokemon_id: meowth.id) 
             UserPokemon.create(user_id: self.boss1.id, pokemon_id: meowth.id)
         end
@@ -243,7 +280,8 @@ class CommandLineInterface
     def player_battle(user1, user2)
         a = user1.pokemons
         b = user2.pokemons
-        wa = a.map{|p| p.weight} 
+    
+        wa = a.map{|p|  p.weight * find_userpokemon(user1, p).level} 
         wb = b.map{|p| p.weight}
         total_a = wa.sum 
         total_b = wb.sum
