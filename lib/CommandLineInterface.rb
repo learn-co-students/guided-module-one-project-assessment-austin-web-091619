@@ -131,7 +131,7 @@ class CommandLineInterface
     
     end
     def lost_to_boss
-        puts "Sorry #{self.player.name} , #{self.currentboss} got you."
+        puts "Sorry #{self.player.name} , #{self.currentboss.name} got you."
         puts "Train a little bit and then try again"
     end
     def beat_a_boss
@@ -148,7 +148,7 @@ class CommandLineInterface
             d = select_difficulty
             pokemon = first_pokemon(d)
             pokemon_ownership(pokemon)
-            puts "Congratulations, #{self.player.name}, you've got a new #{p.name} that weighs #{p.weight} pounds."
+            puts "Congratulations, #{self.player.name}, you've got a new #{pokemon.name} that weighs #{pokemon.weight} pounds."
         elsif input == 2
             returning_user
         end
@@ -159,7 +159,9 @@ class CommandLineInterface
                 next_boss
             when 2
                 # training_battle
-                
+                # training_pokemon
+                # if trainer wins 
+                # run pokemon_ownership()
             when 3
                 view_pokemon
             when 4
@@ -175,6 +177,10 @@ class CommandLineInterface
             end
             input = main_menu
         end
+    end
+
+    def training_pokemon
+        Pokemon.all.random
     end
 
     def  bosses
