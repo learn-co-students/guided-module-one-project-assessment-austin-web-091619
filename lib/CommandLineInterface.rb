@@ -110,7 +110,9 @@ class CommandLineInterface
         pokemons.each do |pokemon|
             puts "A #{weight_category(pokemon)} #{pokemon.name} that weighs #{pokemon.weight} pounds"
         end
+        binding.pry
     end
+    
     def update_boss
         bossname = "boss#{player.level}"
         self.currentboss = self.send(bossname)
@@ -229,7 +231,15 @@ class CommandLineInterface
     def delete_user
         UserPokemon.where(user_id: self.player.id).destroy_all
         player.destroy
+    end
 
+    def trainer_battle(pokemon)
+        a = @player
+        b = pokemon.pokemons 
+        player_w = a.map{|p| p.weight}
+        opponent_w = a.map{|p| p.weight}
+        total_player_weight = pw.sum
+        total_
     end
 
 end
