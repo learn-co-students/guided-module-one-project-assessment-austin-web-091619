@@ -9,7 +9,7 @@ class CommandLineInterface
         valid_array = ["1", "2"]
         user_input(valid_array)
     end
-    
+
     def new_user
         puts "What's your name, trainer?"
         username = user_text_input
@@ -70,6 +70,7 @@ class CommandLineInterface
     end
 
     def first_pokemon(difficulty)
+        random_pokemon
         if difficulty == 1
             Pokemon.create(name: Faker::Games::Pokemon.name, weight: Faker::Number.between(from:30, to:40) )
         elsif difficulty == 2
@@ -183,11 +184,26 @@ class CommandLineInterface
             input = main_menu
         end
     end
-
+    def leveling_up(pokemon)
+        x = rand(1..4)
+        if x == 1
+            self.player.pokemons << pokemon
+        elsif x ==2 || x==3
+            self.player.userpokemons.sample.level += 1
+        else
+            self.player.userpokemons.sample.level += 2
+        end
+    end
     def training_pokemon
         Pokemon.all.random
     end
-
+    def random_pokemon
+        id = rand(1..150)
+        p = PokeApi.get(pokemon: id) 
+        
+        poke = Pokemon.find_or_create_by(name: p.species.name)
+        poke.weight=p.weight
+    end
     def  bosses
         if !User.find_by(name: "Jesse", boss: "T")
            @boss1 = User.create(name: "Jesse", boss: "T")
