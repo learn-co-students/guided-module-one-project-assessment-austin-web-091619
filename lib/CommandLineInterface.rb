@@ -1,3 +1,4 @@
+
 class CommandLineInterface
     attr_accessor :player, :boss1, :boss2, :boss3, :currentboss
     def new_game
@@ -8,6 +9,7 @@ class CommandLineInterface
         valid_array = ["1", "2"]
         user_input(valid_array)
     end
+    
     def new_user
         puts "What's your name, trainer?"
         username = user_text_input
@@ -110,11 +112,13 @@ class CommandLineInterface
         pokemons.each do |pokemon|
             puts "A #{weight_category(pokemon)} #{pokemon.name} that weighs #{pokemon.weight} pounds"
         end
+        binding.pry 
     end
     def update_boss
         bossname = "boss#{player.level}"
         self.currentboss = self.send(bossname)
     end
+    
 
     def next_boss 
         update_boss
