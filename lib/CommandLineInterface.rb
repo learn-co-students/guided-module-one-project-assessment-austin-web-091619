@@ -161,9 +161,9 @@ class CommandLineInterface
                 next_boss
             when 2
                 # training_battle
-                # t = training_pokemon
+                # training_pokemon
                 # if trainer wins 
-                # run pokemon_ownership(t)
+                # run pokemon_ownership()
             when 3
                 view_pokemon
             when 4
@@ -240,12 +240,13 @@ class CommandLineInterface
     end
 
     def trainer_battle(pokemon)
-        a = @player
-        b = pokemon.pokemons 
-        player_w = a.map{|p| p.weight}
-        opponent_w = a.map{|p| p.weight}
-        total_player_weight = pw.sum
-        total_
+        a = self.player.pokemons.first.weight
+        b = pokemon.weight 
+        if a  > b  
+            return pokemon 
+        else
+            return "loss"
+        end
     end
 
 end
