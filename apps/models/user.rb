@@ -1,4 +1,10 @@
 class User < ActiveRecord::Base
-    has_many :stats
-    has_many :levels, through: :stats
+    has_many :games
+    has_many :levels, through: :games
+
+
+
+
+
+
 end
