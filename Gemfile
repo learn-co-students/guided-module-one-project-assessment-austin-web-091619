@@ -16,6 +16,6 @@ gem 'sqlite3', '~> 1.3.6'
 gem "rake", "12.3.2"
 gem "poke-api-v2"
 gem "json"
-
+gem "colorize"
 gem "pry"
 gem "require_all" 
