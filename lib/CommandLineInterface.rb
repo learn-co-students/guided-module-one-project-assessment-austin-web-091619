@@ -124,7 +124,7 @@ class CommandLineInterface
         pokemons.each do |pokemon|
             userpokemon = find_userpokemon(self.player, pokemon)
             w = pokemon.weight * userpokemon.level
-            puts "ID# #{userpokemon.id}. A #{weight_category(pokemon)} #{pokemon.name} that weighs #{w} pounds"
+            puts "ID# #{userpokemon.id}. A #{weight_category(pokemon)} #{pokemon.name.capitalize} that weighs #{w} pounds"
             if userpokemon.nickname
                 puts "---Nicknamed:   '#{userpokemon.nickname}'"
             end
@@ -184,8 +184,9 @@ class CommandLineInterface
             # pokemon = first_pokemon(d)
             pokemon = random_pokemon
             pokemon_ownership(pokemon)
+
             clear_screen
-            puts "Congratulations, #{self.player.name}, you've got a new #{pokemon.name} that weighs #{pokemon.weight} pounds."
+            puts "Congratulations, #{self.player.name}, you've got a new #{pokemon.name.capitalize} that weighs #{pokemon.weight} pounds."
             pokeball
         elsif input == 2
             returning_user
