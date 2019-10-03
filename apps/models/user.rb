@@ -37,7 +37,7 @@ class User < ActiveRecord::Base
         completions.order(:level_id).last
     end
 
-    def fastest_completion_by_level
+    def fastest_completions
         arrLevel = [1,2,3,4,5,6,7,8,9,10]
         fc = []
         arrLevel.each do |level| 

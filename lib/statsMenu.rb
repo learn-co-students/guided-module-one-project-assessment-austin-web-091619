@@ -38,11 +38,11 @@ def show_personal_stat
     input = gets.chomp.to_i
 
         if input == 1
-                
+            self.fastest_completions               
         end
 
         if input == 2
-            
+            self.success_rate
         end
 
         if input == 3
@@ -60,11 +60,11 @@ def show_global_stat
     input = gets.chomp.to_i
     
         if input == 1
-
+            self.global_fastest
         end
 
         if input == 2
-
+            self.global_success_rate
         end
 
         if input == 3
