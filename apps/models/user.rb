@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
     end
 
     def completions
-        attempts.where("completion_time != nil")
+        attempts.where("completion_time > 0")
     end
 
     def completions_by_level
@@ -30,7 +30,7 @@ class User < ActiveRecord::Base
     end
 
     def success_rate
-        (completions.count / attempts.count) * 100
+        (completions.count.to_f / attempts.count.to_f) * 100.0
     end
 
     def highest_level

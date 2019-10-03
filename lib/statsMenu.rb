@@ -31,8 +31,8 @@ end
 def show_personal_stat
 
     puts "Personal Statistics"
-    puts "1. Fastest Completion by Level"
-    puts "2. Success Rate by Level"
+    puts "1. Fastest Completions"
+    puts "2. Success Rate"
     puts "3. Return to Stats Menu"
 
     input = gets.chomp.to_i
@@ -53,8 +53,8 @@ end
 def show_global_stat
 
     puts "Global Statistics"
-    puts "1. Fastest Completion by Level"
-    puts "2. Success Rate by Level"
+    puts "1. Fastest Completions"
+    puts "2. Success Rate"
     puts "3. Return to Stats Menu"   
 
     input = gets.chomp.to_i
