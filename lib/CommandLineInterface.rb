@@ -88,6 +88,7 @@ class CommandLineInterface
 
     def pokemon_ownership(pokemon)
         UserPokemon.create(user_id: self.player.id, pokemon_id: pokemon.id, level: 1)
+
     end
 
     def main_menu
@@ -149,6 +150,15 @@ class CommandLineInterface
             puts "Maybe you should start your challenge again."
             return
         end
+        clear_screen
+        if self.player.level == 1
+            meowth
+        elsif self.player.level == 2
+            arbok
+        elsif self.player.level == 3
+            muk
+        end
+
         puts "Your next challenge is #{self.currentboss.name}."
         result = player_battle(self.player, self.currentboss)
         puts "after the dust clears, the final pokemon belongs to #{result.name}"
@@ -201,6 +211,8 @@ class CommandLineInterface
                 rando = random_pokemon
                 results = trainer_battle(rando)
                 if results == "loss"
+                    clear_screen
+                    machamp
                     puts "You got beat by a #{rando.name}"
                     puts "Hopefully you'll have better luck next time."
                 else
@@ -236,7 +248,11 @@ class CommandLineInterface
       
         if x == 1
             UserPokemon.create(user_id: self.player.id, pokemon_id: pokemon.id, level: 1)
+
+            clear_screen
+            pokeball
             puts "A #{pokemon.name.capitalize} joined your team!!!!!!!!"
+
         elsif x ==2 || x==3
             p=self.player.pokemons.sample
             u_p = find_userpokemon(self.player, p)
@@ -244,6 +260,7 @@ class CommandLineInterface
             u_p.save
             clear_screen
             cherry
+
             puts "One of your pokemon got slightly heavier."
         else
             u_p = self.player.user_pokemons.sample
@@ -251,6 +268,7 @@ class CommandLineInterface
             u_p.save
             clear_screen
             add_sig_weight
+
             puts "One of your pokemon really put on some pounds"
         end
     end
