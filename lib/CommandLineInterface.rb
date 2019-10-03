@@ -1,4 +1,4 @@
-
+require_relative 'MainMenu'
 class CommandLineInterface
     attr_accessor :player, :boss1, :boss2, :boss3, :currentboss, :boss4
     def new_game
@@ -175,6 +175,8 @@ class CommandLineInterface
 
     def run
         bosses
+        clear_screen
+        splash
         input = new_game
         if input == 1
             new_user
@@ -182,9 +184,12 @@ class CommandLineInterface
             # pokemon = first_pokemon(d)
             pokemon = random_pokemon
             pokemon_ownership(pokemon)
+            clear_screen
             puts "Congratulations, #{self.player.name}, you've got a new #{pokemon.name} that weighs #{pokemon.weight} pounds."
+            pokeball
         elsif input == 2
             returning_user
+            clear_screen
         end
         input = main_menu
         while input != 5
@@ -203,6 +208,7 @@ class CommandLineInterface
                 end
                 
             when 3
+                clear_screen
                 view_pokemon
             when 4
                 # delete user
@@ -214,8 +220,10 @@ class CommandLineInterface
                 pokemon = random_pokemon
                 pokemon_ownership(pokemon)
             when 5
+                puts "Goodbye!"
                 break
             when 6
+                clear_screen
                 id = selectpokemon
                 makenickname(id)
             end
