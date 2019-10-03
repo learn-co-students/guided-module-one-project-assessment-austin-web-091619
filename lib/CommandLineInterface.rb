@@ -248,7 +248,7 @@ class CommandLineInterface
       
         if x == 1
             UserPokemon.create(user_id: self.player.id, pokemon_id: pokemon.id, level: 1)
-
+            binding.pry
             clear_screen
             pokeball
             puts "A #{pokemon.name.capitalize} joined your team!!!!!!!!"
