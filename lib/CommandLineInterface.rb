@@ -26,10 +26,12 @@ class CommandLineInterface
     def bad_input
         puts "Invalid input"
     end
+
     def quit
         # should exit the program
         
     end
+
     def user_text_input
         # a method to get text from the user
         # used for name
@@ -46,6 +48,7 @@ class CommandLineInterface
             puts available
             command = gets.chomp
         end
+        
         if command == "quit" || command == "exit"
             quit
         end
@@ -95,17 +98,19 @@ class CommandLineInterface
         puts "3 -- View your pokemon"
         puts "4 -- Restart your game"
         puts "5 -- Close the game"
-        valid_array=["1", "2","3","4","5"]
+        puts "6 -- Give a pokemon a nickname"
+        valid_array=["1", "2","3","4","5","6"]
         user_input(valid_array)
     end
     def weight_category(pokemon)
-        if pokemon.weight < 100
+        weight = pokemon.weight * find_userpokemon(self.player, pokemon).level
+        if weight < 100
             return "tiny"
-        elsif  pokemon.weight <300
+        elsif  weight <300
             return "small"
-        elsif pokemon.weight <600
+        elsif weight <600
             return "normal"
-        elsif pokemon.weight <1000
+        elsif weight <1000
             return "large"
         else 
             return "huge"
@@ -115,10 +120,14 @@ class CommandLineInterface
     def view_pokemon
         pokemons = self.player.pokemons
         puts "You own the following pokemon:"
+        
         pokemons.each do |pokemon|
-            w = pokemon.weight * find_userpokemon(self.player, pokemon).level
-            puts "A #{weight_category(pokemon)} #{pokemon.name} that weighs #{w} pounds"
-
+            userpokemon = find_userpokemon(self.player, pokemon)
+            w = pokemon.weight * userpokemon.level
+            puts "ID# #{userpokemon.id}. A #{weight_category(pokemon)} #{pokemon.name} that weighs #{w} pounds"
+            if userpokemon.nickname
+                puts "---Nicknamed:   '#{userpokemon.nickname}'"
+            end
         end
        
     end
@@ -155,6 +164,7 @@ class CommandLineInterface
         puts "Sorry #{self.player.name} , #{self.currentboss.name} got you."
         puts "Train a little bit and then try again"
     end
+
     def beat_a_boss
         puts "Congratulations on beating #{self.currentboss.name}"
         player.level+=1
@@ -162,6 +172,7 @@ class CommandLineInterface
         update_boss
         puts "Your next challenge is taking on #{self.currentboss.name}"
     end
+
     def run
         bosses
         input = new_game
@@ -204,6 +215,9 @@ class CommandLineInterface
                 pokemon_ownership(pokemon)
             when 5
                 break
+            when 6
+                id = selectpokemon
+                makenickname(id)
             end
             input = main_menu
         end
@@ -240,6 +254,7 @@ class CommandLineInterface
         poke.save
         poke
     end
+
     def  bosses
         if !User.find_by(name: "Jesse", boss: "T")
            @boss1 = User.create(name: "Jesse", boss: "T")
@@ -291,6 +306,7 @@ class CommandLineInterface
             return user2
         end 
     end
+
     def delete_user
         UserPokemon.where(user_id: self.player.id).destroy_all
         player.destroy
@@ -306,4 +322,21 @@ class CommandLineInterface
         end
     end
 
+    def selectpokemon
+        # shows the user the pokemon and returns the user_pokemon id to update
+        view_pokemon
+        puts "Select which pokemon to change the nickname of by its ID#"
+        valid_array = []
+        self.player.pokemons.each do |pokemon|
+            valid_array << find_userpokemon(self.player, pokemon).id.to_s
+        end
+        number = user_input(valid_array)
+    end
+    def makenickname(id)
+        puts "What should the pokemons nickname be?"
+        nick = user_text_input
+        p = UserPokemon.find_by(id: id)
+        p.nickname = nick
+        p.save
+    end
 end
