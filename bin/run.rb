@@ -1,64 +1,38 @@
-require_relative '../config/environment'
-require_relative '../apps/models/user'
+require_relative '../lib/gameIntro.rb'
+require_relative '../lib/mainMenu.rb'
+require_relative '../lib/statsMenu.rb'
+require_relative '../lib/game.rb'
 
-# NEW_GAME = 1
-# CONTINUE_GAME = 2
-# SHOW_STATS = 3
-# GAME_OVER = false
+NEW_GAME = 1
+CONTINUE_GAME = 2
+SHOW_STATS = 3
 
-# while (GAME_OVER)
+# GAME INTRO
+userExists = gameIntro
 
-#     gameIntro
-    
-#     choice = gets.chomp
+if userExists
+    user = loginMenu
+else
+    user = createUser
+end
 
-#     if choice = NEW_GAME
-#         GAME_OVER = play_new_game
-#     elsif choice = CONTINUE_GAME
-#         GAME_OVER = continue_game
-#     elsif choice = SHOW_STATS
-#         GAME_OVER = show_stats
-#     else
-#         "Wrong"
-#     end
+loop do
 
-#     save
+    # MAIN MENU
+    userInput = mainMenu(user)
 
-# end
+    # GAME PLAY
+    if userInput == NEW_GAME
+        newGame(user)
+    elsif userInput == CONTINUE_GAME
+        continueGame(user)
+    elsif userInput == SHOW_STATS
+        #STATS MENU
+        statsMenu(user)
+    end
 
+    break if stopGame?
 
+end
 
-
-# puts "Welcome to _________"
-# puts "Do you have an existing account?"
-# puts "y/n"
-# input = gets.chomp
-
-
-
-
-
-
-
-# def gameIntro
-#     if input = 'y'||'Y'
-#         "Type your username: "
-#         username = gets.chomp
-#         "Type your password: "
-#         password = gets.chomp
-
-#         User.check(username, password)
-#     elsif input = 'n'||'N'
-#         "New account info"
-#         "Username: "
-#         new_username = gets.chomp
-#         "Password: "
-#         confirm_new_password = gets.chomp
-#         "Re-enter Password: "
-#         confirm_new_password_2 = gets.chomp
-#         if confirm_new_password != confirm_new_password_2
-#             puts "Passwords don't match"
-#     else
-#         "That wasn't y/n"
-#     end
-# end
+puts "See you soon!"
