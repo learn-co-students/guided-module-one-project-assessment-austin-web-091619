@@ -1,5 +1,9 @@
-require 'bundler'
+require 'bundler/setup'
+require 'pry'
+require 'sinatra/activerecord'
+
 Bundler.require
 
-ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: 'db/development.db')
-require_all 'lib'
+Dir[File.join(File.dirname(__FILE__), "../apps/models", "*.rb")].each {|f| require f}
+
+ActiveRecord::Base.establish_connection({adapter: 'sqlite3', database: 'db/connect_game.db'})
